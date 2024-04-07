@@ -1,0 +1,66 @@
+name: test
+
+on:
+  workflow_call:
+    # Unfortunately GitHub does not support referencing
+    # the inputs of another reusable workflow
+    # So we have to hardcode the inputs here.
+    # Please keep this in sync with the inputs
+    # of the used reusable workflows.
+    inputs:
+      go_version:
+        description: Go version to use
+        type: string
+        required: false
+      go_version_file:
+        description: Go version to use from go.mod
+        type: string
+        required: false
+        default: go.mod
+      golangci_config:
+        description: Path to the golangci config file
+        type: string
+        required: false
+
+      python_version:
+        description: Python version to use
+        type: string
+        required: false
+      use_pipenv:
+        description: Whether to use pipenv
+        type: boolean
+        required: false
+        default: false
+
+      before_tests:
+        description: Commands to run before tests
+        type: string
+        required: false
+      additional_args:
+        description: Additional parameters to pass to the test command
+        type: string
+        required: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # We need to checkout here aswell because of the `hashFiles` function
+      - uses: actions/checkout@v4
+      - name: Test Go
+        if: hashFiles('**/*.go') != ''
+        uses: ./.github/workflows/test-go.yml@main
+        with:
+          go_version: ${{ github.event.inputs.go_version }}
+          go_version_file: ${{ github.event.inputs.go_version_file }}
+          before_tests: ${{ github.event.inputs.before_tests }}
+          additional_args: ${{ github.event.inputs.additional_args }}
+
+      - name: Test Python
+        if: hashFiles('**/*.py') != ''
+        uses: ./.github/workflows/test-python.yml@main
+        with:
+          python_version: ${{ github.event.inputs.python_version }}
+          use_pipenv: ${{ github.event.inputs.use_pipenv }}
+          before_tests: ${{ github.event.inputs.before_tests }}
+          additional_args: ${{ github.event.inputs.additional_args }}

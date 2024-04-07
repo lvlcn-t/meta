@@ -1,0 +1,29 @@
+name: Scan Image
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: |
+          The image to scan.
+
+          Example: `ghcr.io/org/repo/image:tag`
+        type: string
+        required: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ github.event.inputs.image }}
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: "trivy-results.sarif"

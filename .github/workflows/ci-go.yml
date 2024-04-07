@@ -1,0 +1,60 @@
+# We have a dedicated CI workflow for building and releasing Go projects because
+# we're using goreleaser to build and release Go projects.
+name: Continuous Integration of a Go project
+
+on:
+  workflow_call:
+    inputs:
+      go_version_file:
+        description: Location of the go.mod file to read the Go version from
+        type: string
+        required: false
+        default: go.mod
+      go_releaser_config:
+        description: Location of the goreleaser configuration file
+        type: string
+        required: false
+        default: .goreleaser.yml
+
+permissions:
+  contents: write
+  packages: write
+  security-events: write
+
+jobs:
+  image:
+    name: Build, scan & push image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Go
+        uses: ./.github/workflows/build-go.yml@main
+        with:
+          go_version_file: ${{ github.event.inputs.go_version_file }}
+          releaser_args: release --snapshot --clean --config ${{ github.event.inputs.go_releaser_config }}
+
+      - name: Get tag ref
+        id: version
+        run: echo "value=commit-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Scan Image
+        uses: ./.github/workflows/scan-image.yml@main
+        with:
+          image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image to registry
+        run: |
+          docker push ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
+
+      - name: Sign image
+        uses: ./.github/workflows/sign-image.yml@main
+        with:
+          image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
+          digest: ${{ steps.version.outputs.value }}

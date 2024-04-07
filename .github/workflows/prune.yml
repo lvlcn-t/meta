@@ -1,0 +1,77 @@
+name: Prune GHCR
+
+on:
+  workflow_call:
+    inputs:
+      container:
+        description: |
+          The container image name to prune.
+          If this isn't set, the `prune_images` job will be skipped.
+
+          Example:
+
+            `ghcr.io/Codertocat/Hello-World`
+            -> `Hello-World`
+        type: string
+        required: false
+      chart:
+        description: |
+          The chart oci image name to prune.
+          If this isn't set, the `prune_charts` job will be skipped.
+
+          Example:
+
+            `ghcr.io/Codertocat/charts/Hello-World`
+            -> `charts/Hello-World`
+        type: string
+        required: false
+      keep-younger-than:
+        description: The number of days to keep images
+        type: number
+        required: false
+        default: 7
+      prune-untagged:
+        description: Whether to prune untagged images
+        type: boolean
+        required: false
+        default: true
+
+permissions:
+  packages: write
+
+jobs:
+  prune_images:
+    name: Prune old images
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.container }} != null
+
+    steps:
+      - name: Prune Images
+        uses: vlaurin/action-ghcr-prune@v0.5.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          organization: ${{ github.event.organization }}
+          container: ${{ github.event.inputs.container }}
+          keep-younger-than: ${{ github.event.inputs.keep-younger-than }}
+          prune-untagged: ${{ github.event.inputs.prune-untagged }}
+          # This is the default regex for semver tags (https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string)
+          keep-tags-regexes: ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+          prune-tags-regexes: |
+            ^commit-
+
+  prune_charts:
+    name: Prune old charts
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.chart }} != null
+
+    steps:
+      - name: Prune Charts
+        uses: vlaurin/action-ghcr-prune@v0.5.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          organization: ${{ github.event.organization }}
+          container: ${{ github.event.inputs.chart }}
+          keep-younger-than: ${{ github.event.inputs.keep-younger-than }}
+          prune-untagged: ${{ github.event.inputs.prune-untagged }}
+          prune-tags-regexes: |
+            commit-.*$

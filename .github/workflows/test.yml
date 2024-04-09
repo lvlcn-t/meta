@@ -43,7 +43,7 @@ on:
 jobs:
   go:
     runs-on: ubuntu-latest
-    if: github.event.inputs.go_version_file != ''
+    if: inputs.go_version_file != ''
     steps:
       - uses: actions/checkout@v4
       - name: Scan Go
@@ -54,22 +54,22 @@ jobs:
         if: hashFiles('**/*.go') != ''
         uses: ./.github/actions/lint-go
         with:
-          golangci_config: ${{ github.event.inputs.golangci_config }}
+          golangci_config: ${{ inputs.golangci_config }}
 
       - name: Test Go
         if: hashFiles('**/*.go') != ''
         uses: ./.github/actions/test-go
         with:
-          go_version_file: ${{ github.event.inputs.go_version_file }}
-          private_go_server: ${{ github.event.inputs.private_go_server }}
-          before_tests: ${{ github.event.inputs.before_tests }}
-          additional_args: ${{ github.event.inputs.additional_args }}
+          go_version_file: ${{ inputs.go_version_file }}
+          private_go_server: ${{ inputs.private_go_server }}
+          before_tests: ${{ inputs.before_tests }}
+          additional_args: ${{ inputs.additional_args }}
         env:
           PRIVATE_GO_SERVER_TOKEN: ${{ secrets.PRIVATE_GO_SERVER_TOKEN }}
 
   python:
     runs-on: ubuntu-latest
-    if: github.event.inputs.python_version != ''
+    if: inputs.python_version != ''
     steps:
       - uses: actions/checkout@v4
       # TODO: Uncomment when the actions are ready
@@ -77,7 +77,7 @@ jobs:
       #   if: hashFiles('**/*.py') != ''
       #   uses: lvlcn-t/meta/.github/actions/lint-python.yml@main
       #   with:
-      #     use_pipenv: "${{ github.event.inputs.use_pipenv }}"
+      #     use_pipenv: "${{ inputs.use_pipenv }}"
 
       # - name: Scan Python
       #   if: hashFiles('**/*.py') != ''
@@ -87,7 +87,7 @@ jobs:
         if: hashFiles('**/*.py') != ''
         uses: ./.github/actions/test-python
         with:
-          python_version: ${{ github.event.inputs.python_version }}
-          use_pipenv: "${{ github.event.inputs.use_pipenv }}"
-          before_tests: ${{ github.event.inputs.before_tests }}
-          additional_args: ${{ github.event.inputs.additional_args }}
+          python_version: ${{ inputs.python_version }}
+          use_pipenv: "${{ inputs.use_pipenv }}"
+          before_tests: ${{ inputs.before_tests }}
+          additional_args: ${{ inputs.additional_args }}

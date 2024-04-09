@@ -43,7 +43,7 @@ on:
 jobs:
   go:
     runs-on: ubuntu-latest
-    if: github.event.inputs.go_version_file != null
+    if: github.event.inputs.go_version_file != ''
     steps:
       - uses: actions/checkout@v4
       - name: Scan Go
@@ -69,7 +69,7 @@ jobs:
 
   python:
     runs-on: ubuntu-latest
-    if: github.event.inputs.python_version != null
+    if: github.event.inputs.python_version != ''
     steps:
       - uses: actions/checkout@v4
       # TODO: Uncomment when the actions are ready

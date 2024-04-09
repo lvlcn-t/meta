@@ -40,6 +40,16 @@ on:
         description: Token for the private Go server
         required: false
 
+permissions:
+  # Needed if the reusable workflow is used in a private repository
+  contents: read
+  # Needed for the static analysis result upload
+  security-events: write
+  # Needed for golangci-lint for the only-new-issues flag
+  pull-requests: read
+  # Needed to annotate the code with the scan results > https://github.blog/2018-12-14-introducing-check-runs-and-annotations/
+  checks: write
+
 jobs:
   go:
     runs-on: ubuntu-latest

@@ -18,10 +18,10 @@ jobs:
           helm registry login -u ${{ secrets.GITHUB_ACTOR }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
 
       - name: Lint Helm Chart
-        run: helm lint ${{ github.event.inputs.chart_location }}
+        run: helm lint ${{ inputs.chart_location }}
 
       - name: Package Helm Chart
-        run: helm package ${{ github.event.inputs.chart_location }} -d ./charts
+        run: helm package ${{ inputs.chart_location }} -d ./charts
 
       - name: Push Helm Chart package
         run: helm push $(ls ./chart/*.tgz| head -1) oci://ghcr.io/${{ github.actor }}/charts

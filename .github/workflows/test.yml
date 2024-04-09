@@ -85,13 +85,13 @@ jobs:
       # TODO: Uncomment when the actions are ready
       # - name: Lint Python
       #   if: hashFiles('**/*.py') != ''
-      #   uses: lvlcn-t/meta/.github/actions/lint-python.yml@main
+      #   uses: lvlcn-t/meta/.github/actions/lint-python@main
       #   with:
       #     use_pipenv: "${{ inputs.use_pipenv }}"
 
       # - name: Scan Python
       #   if: hashFiles('**/*.py') != ''
-      #   uses: lvlcn-t/meta/.github/actions/scan-python.yml@main
+      #   uses: lvlcn-t/meta/.github/actions/scan-python@main
 
       - name: Test Python
         if: hashFiles('**/*.py') != ''

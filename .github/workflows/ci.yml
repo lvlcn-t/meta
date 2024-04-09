@@ -27,7 +27,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
           tags: |
             type=ref,event=tag
             type=ref,event=branch
@@ -54,16 +54,16 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
             ${{ steps.meta.outputs.tags }}
 
       - name: Scan Image
-        uses: ./.github/actions/scan-image.yml@main
+        uses: lvlcn-t/meta/.github/actions/scan-image@main
         with:
-          image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
+          image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
 
       - name: Sign Image
-        uses: ./.github/actions/sign-image.yml@main
+        uses: lvlcn-t/meta/.github/actions/sign-image@main
         with:
-          image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
+          image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
           digest: ${{ steps.build-push.outputs.digest }}

@@ -15,6 +15,13 @@ on:
         type: string
         required: false
         default: .goreleaser.yml
+    secrets:
+      GPG_PRIVATE_KEY:
+        description: GPG private key to sign the release
+        required: false
+      GPG_PASSPHRASE:
+        description: GPG passphrase to sign the release
+        required: false
 
 permissions:
   contents: write
@@ -32,6 +39,9 @@ jobs:
         with:
           go_version_file: ${{ inputs.go_version_file }}
           releaser_args: release --snapshot --clean --config ${{ inputs.go_releaser_config }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Get tag ref
         id: version

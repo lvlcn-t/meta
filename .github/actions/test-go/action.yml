@@ -10,6 +10,12 @@ inputs:
   private_go_server:
     description: The URL of the private Go server
     required: false
+  # Unfortunately GitHub Actions doesn't support secrets in the composite action
+  # so we have to pass the token as an input. It will still be masked in the logs because
+  # we're giving it as environment variable to the step's shell.
+  private_go_server_token:
+    description: The token to authenticate with the private Go server
+    required: false
   before_tests:
     description: Commands to run before tests
     required: false
@@ -32,7 +38,7 @@ runs:
       env:
         PRIVATE_GO_SERVER: ${{ inputs.private_go_server }}
         PRIVATE_SERVER_USER: __token__
-        PRIVATE_SERVER_TOKEN: ${{ secrets.PRIVATE_GO_SERVER_TOKEN }}
+        PRIVATE_SERVER_TOKEN: ${{ inputs.private_go_server_token }}
       run: |
         ${{ inputs.before_tests }}
         echo "machine ${PRIVATE_GO_SERVER}" >> ~/.netrc

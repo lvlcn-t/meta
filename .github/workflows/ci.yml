@@ -58,12 +58,12 @@ jobs:
             ${{ steps.meta.outputs.tags }}
 
       - name: Scan Image
-        uses: ./.github/workflows/scan-image.yml@main
+        uses: ./.github/actions/scan-image.yml@main
         with:
           image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
 
       - name: Sign Image
-        uses: ./.github/workflows/sign-image.yml@main
+        uses: ./.github/actions/sign-image.yml@main
         with:
           image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
           digest: ${{ steps.build-push.outputs.digest }}

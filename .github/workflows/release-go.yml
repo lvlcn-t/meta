@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build, push and release
-        uses: ./.github/workflows/build-go.yml@main
+        uses: ./.github/actions/build-go.yml@main
         with:
           go_version_file: ${{ github.event.inputs.go_version_file }}
           releaser_args: release --clean
@@ -32,7 +32,7 @@ jobs:
         run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
       - name: Sign release image
-        uses: ./.github/workflows/sign-image.yml@main
+        uses: ./.github/actions/sign-image.yml@main
         with:
           image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.tag }}
           digest: ${{ github.sha }}

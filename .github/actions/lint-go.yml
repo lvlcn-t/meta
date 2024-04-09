@@ -1,0 +1,27 @@
+name: Lint Go
+
+description: Lint Go code
+
+inputs:
+  go_version_file:
+    description: Go version to use from go.mod
+    required: false
+    default: go.mod
+  golangci_config:
+    description: Path to the golangci config file
+    required: false
+    default: .golangci.yml
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    - name: Set up Go w/ go.mod version
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: ${{ inputs.go_version_file }}
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v4
+      with:
+        args: --config ${{ inputs.golangci_config }}

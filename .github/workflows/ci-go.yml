@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build Go
-        uses: ./.github/workflows/build-go.yml@main
+        uses: ./.github/actions/build-go.yml@main
         with:
           go_version_file: ${{ github.event.inputs.go_version_file }}
           releaser_args: release --snapshot --clean --config ${{ github.event.inputs.go_releaser_config }}
@@ -38,7 +38,7 @@ jobs:
         run: echo "value=commit-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Scan Image
-        uses: ./.github/workflows/scan-image.yml@main
+        uses: ./.github/actions/scan-image.yml@main
         with:
           image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
 
@@ -54,7 +54,7 @@ jobs:
           docker push ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
 
       - name: Sign image
-        uses: ./.github/workflows/sign-image.yml@main
+        uses: ./.github/actions/sign-image.yml@main
         with:
           image: ghcr.io/${{ github.event.repository }}:${{ steps.version.outputs.value }}
           digest: ${{ github.sha }}

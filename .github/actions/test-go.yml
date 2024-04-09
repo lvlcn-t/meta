@@ -1,0 +1,54 @@
+name: Test Go
+
+description: Run tests for a Go project
+
+inputs:
+  go_version_file:
+    description: Go version to use from go.mod
+    required: false
+    default: go.mod
+  private_go_server:
+    description: The URL of the private Go server
+    required: false
+  before_tests:
+    description: Commands to run before tests
+    required: false
+  additional_args:
+    description: Additional parameters to pass to the test
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    # Unfortunately GitHub Actions doesn't support yaml anchors > https://github.com/actions/runner/issues/1182
+    - name: Set up Go w/ go.mod version
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: ${{ inputs.go_version_file }}
+
+    - name: Run tests
+      shell: bash
+      env:
+        PRIVATE_GO_SERVER: ${{ inputs.private_go_server }}
+        PRIVATE_SERVER_USER: __token__
+        PRIVATE_SERVER_TOKEN: ${{ secrets.PRIVATE_GO_SERVER_TOKEN }}
+      run: |
+        ${{ inputs.before_tests }}
+        echo "machine ${PRIVATE_GO_SERVER}" >> ~/.netrc
+        echo "    login ${PRIVATE_SERVER_USER}" >> ~/.netrc
+        echo "    password ${PRIVATE_SERVER_TOKEN}" >> ~/.netrc
+        go mod download
+        go install github.com/boumenot/gocover-cobertura@latest
+        go install gotest.tools/gotestsum@latest
+        gotestsum --junitfile report.xml --format standard-verbose -- -race -count=1 -covermode=atomic -coverprofile=cover.out.tmp -coverpkg=./... ${{ inputs.additional_args }} ./...
+        cat cover.out.tmp | grep -vE '(_test.go|_moq.go|_templ.go)' | grep -vE 'test/|tests/|mocks/' > cover.out
+        go tool cover -html=cover.out -o coverage.html
+        gocover-cobertura < cover.out > coverage.xml
+        go tool cover -func=cover.out | grep total | awk '{print "total-coverage "$3" of statements"}'
+
+    - name: Upload coverage report
+      uses: 5monkeys/cobertura-action@master
+      with:
+        path: coverage.xml
+        minimum_coverage: 70

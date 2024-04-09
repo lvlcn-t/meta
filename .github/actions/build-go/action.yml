@@ -11,6 +11,15 @@ inputs:
     description: Arguments to pass to go releaser
     required: false
     default: release --clean
+  GITHUB_TOKEN:
+    description: The GitHub token to use for the release
+    required: true
+  GPG_PRIVATE_KEY:
+    description: The GPG private key to use for signing the release
+    required: false
+  GPG_PASSPHRASE:
+    description: The passphrase for the GPG private key
+    required: false
 
 runs:
   using: "composite"
@@ -24,10 +33,19 @@ runs:
       with:
         go-version-file: ${{ inputs.go_version_file }}
 
+    - name: Import GPG key
+      if: ${{ inputs.GPG_PRIVATE_KEY != '' && inputs.GPG_PASSPHRASE != '' }}
+      id: import_gpg
+      uses: crazy-max/ghaction-import-gpg@v6
+      with:
+        gpg_private_key: ${{ inputs.GPG_PRIVATE_KEY }}
+        passphrase: ${{ inputs.GPG_PASSPHRASE }}
+
     - name: Run goreleaser
       uses: goreleaser/goreleaser-action@v5
       with:
         version: latest
         args: ${{ inputs.releaser_args }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}

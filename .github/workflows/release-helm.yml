@@ -8,6 +8,12 @@ on:
         type: string
         required: true
 
+permissions:
+  # Needed to read the contents of the repository
+  contents: read
+  # Needed to push the Helm chart to the GHCR
+  packages: write
+
 jobs:
   release:
     runs-on: ubuntu-latest

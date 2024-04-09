@@ -16,6 +16,12 @@ on:
         description: GPG passphrase to sign the release
         required: false
 
+permissions:
+  # Needed for goreleaser to create a release
+  contents: write
+  # Needed for goreleaser to push the image
+  packages: write
+
 jobs:
   release:
     runs-on: ubuntu-latest

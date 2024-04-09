@@ -37,6 +37,7 @@ on:
         default: true
 
 permissions:
+  # Needed to delete images
   packages: write
 
 jobs:

@@ -10,7 +10,9 @@ on:
         default: linux/amd64,linux/arm64
 
 permissions:
+  # Needed to read the contents of the repository
   contents: read
+  # Needed to push the image to the container registry
   packages: write
 
 jobs:

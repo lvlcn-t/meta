@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Scan Go
         if: hashFiles('**/*.go') != ''
-        uses: ./.github/actions/scan-go.yml@main
+        uses: ./.github/actions/sast-go.yml@main
 
       - name: Lint Go
         if: hashFiles('**/*.go') != ''
@@ -69,6 +69,7 @@ jobs:
 
   python:
     runs-on: ubuntu-latest
+    if: github.event.inputs.python_version != null
     steps:
       - uses: actions/checkout@v4
       # TODO: Uncomment when the actions are ready

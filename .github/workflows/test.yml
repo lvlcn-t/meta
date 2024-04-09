@@ -7,7 +7,6 @@ on:
         description: Go version to use from go.mod
         type: string
         required: false
-        default: go.mod
       golangci_config:
         description: Path to the golangci config file
         type: string
@@ -44,6 +43,7 @@ on:
 jobs:
   go:
     runs-on: ubuntu-latest
+    if: github.event.inputs.go_version_file != null
     steps:
       - uses: actions/checkout@v4
       - name: Scan Go

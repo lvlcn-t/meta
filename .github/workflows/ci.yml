@@ -53,7 +53,7 @@ jobs:
         id: build-push
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ inputs.platforms}}
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}

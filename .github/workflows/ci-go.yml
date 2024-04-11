@@ -24,8 +24,8 @@ on:
         required: false
 
 permissions:
-  # Needed for goreleaser to create a release
-  contents: write
+  # Needed for goreleaser to read the contents of the repository
+  contents: read
   # Needed for goreleaser to push the image
   packages: write
   # Needed to upload the trivy image scan results

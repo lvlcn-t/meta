@@ -1,11 +1,10 @@
 # Project Name<!-- omit from toc -->
 
-<!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable-next-line -->
 <p align="center">
     <a href="/../../commits/" title="Last Commit"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/lvlcn-t/lvlcn-t?style=flat"></a>
     <a href="/../../issues" title="Open Issues"><img alt="Open Issues" src="https://img.shields.io/github/issues/lvlcn-t/lvlcn-t?style=flat"></a>
 </p>
-<!-- markdownlint-enable MD033 -->
 
 - [About this component](#about-this-component)
 - [Installation](#installation)
@@ -69,11 +68,9 @@ The application itself and all end-user facing content will be made available in
 
 The following channels are available for discussions, feedback, and support requests:
 
-<!-- markdownlint-disable MD033 -->
-| Type       | Channel                                                                                                                                                                       |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Issues** | <a href="/../../issues/new/choose" title="General Discussion"><img alt="General Discussion" src="https://img.shields.io/github/issues/lvlcn-t/lvlcn-t?style=flat-square"></a> |
-<!-- markdownlint-enable MD033 -->
+| Type       | Channel                                                                                                                   |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **Issues** | [![General Discussion](https://img.shields.io/github/issues/lvlcn-t/lvlcn-t?style=flat-square)](/../../issues/new/choose) |
 
 ## How to Contribute
 

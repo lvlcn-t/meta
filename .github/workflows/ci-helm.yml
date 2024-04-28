@@ -29,7 +29,14 @@ jobs:
       - name: Get Chart Version
         id: chartVersion
         # Generates a tag like: 0.1.0-commit-1234567
-        run: echo "value=$(git tag --sort=taggerdate | tail -1 | cut -c 2-)-commit-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        run: |
+          base="-commit-$(git rev-parse --short HEAD)"
+          if [ -z "$(git tag --sort=taggerdate | tail -1)" ]; then
+            echo "No tags found, using local chart version."
+            echo "value=$(helm show chart ./chart | grep version | awk '{print $2}')${base}" >> $GITHUB_OUTPUT
+          else
+            echo "value=$(git tag --sort=taggerdate | tail -1 | cut -c 2-)${base}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Setup Helm
         run: |

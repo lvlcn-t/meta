@@ -9,8 +9,8 @@ It also contains multiple repository templates that can be used to create new re
 
 The following repository templates are available:
 
-- [General](./templates/general)
-- [Golang](./templates/golang)
+- [General](https://github.com/lvlcn-t/templates-general)
+- [Golang](https://github.com/lvlcn-t/templates-golang)
 
 ## GitHub Reusable Workflows
 

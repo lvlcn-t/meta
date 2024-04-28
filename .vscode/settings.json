@@ -12,5 +12,11 @@
     },
     "editor.codeActionsOnSave": {
         "source.fixAll.markdownlint": "explicit"
-    }
+    },
+    "files.associations": {
+        ".pre-commit-config.yaml": "yaml",
+        ".goreleaser.yaml": "yaml",
+        ".goreleaser-ci.yaml": "yaml",
+        ".golangci.yaml": "yaml"
+    },
 }

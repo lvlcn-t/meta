@@ -1,0 +1,6 @@
+[submodule "templates/golang"]
+	path = templates/golang
+	url = https://github.com/lvlcn-t/templates-golang
+[submodule "templates/general"]
+	path = templates/general
+	url = https://github.com/lvlcn-t/templates-general

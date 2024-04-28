@@ -1,6 +1,7 @@
 # meta
 
-This repository contains meta configuration files for several [GitHub Reusable Workflows](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows) and [GitHub Composite Actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action).
+This repository contains meta configuration files for several [GitHub Reusable Workflows](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows)
+and [GitHub Composite Actions](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action).
 
 It also contains multiple repository templates that can be used to create new repositories with some pre-configured settings and files.
 

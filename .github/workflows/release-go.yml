@@ -52,3 +52,4 @@ jobs:
         with:
           image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.tag }}
           digest: ${{ github.sha }}
+          cosign_key: ${{ secrets.COSIGN_KEY }}

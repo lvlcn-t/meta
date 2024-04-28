@@ -69,3 +69,4 @@ jobs:
         with:
           image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
           digest: ${{ steps.build-push.outputs.digest }}
+          cosign_key: ${{ secrets.COSIGN_KEY }}

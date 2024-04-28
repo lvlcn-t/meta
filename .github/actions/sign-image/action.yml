@@ -12,6 +12,9 @@ inputs:
   digest:
     description: The digest of the image to sign.
     required: true
+  cosign_key:
+    description: The cosign key to use for signing.
+    required: true
 
 runs:
   using: "composite"
@@ -25,4 +28,4 @@ runs:
       run: |
         cosign sign --key env://COSIGN_KEY --tlog-upload=false ${{ inputs.image }}@${{ inputs.digest }}
       env:
-        COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+        COSIGN_KEY: ${{ inputs.cosign_key }}

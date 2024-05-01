@@ -67,10 +67,15 @@ jobs:
         uses: lvlcn-t/meta/.github/actions/scan-image@main
         with:
           image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Image SHA
+        id: image_sha
+        run: echo "image_sha=$(docker inspect ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }} --format={{.Id}})" >> $GITHUB_OUTPUT
 
       - name: Sign image
         uses: lvlcn-t/meta/.github/actions/sign-image@main
         with:
           image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
-          digest: ${{ github.sha }}
+          digest: ${{ steps.image_sha.outputs.image_sha }}
           cosign_key: ${{ secrets.COSIGN_KEY }}

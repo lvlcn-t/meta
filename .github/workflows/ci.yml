@@ -63,6 +63,7 @@ jobs:
         uses: lvlcn-t/meta/.github/actions/scan-image@main
         with:
           image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sign Image
         uses: lvlcn-t/meta/.github/actions/sign-image@main

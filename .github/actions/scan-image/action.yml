@@ -9,6 +9,9 @@ inputs:
 
       Example: `ghcr.io/org/repo/image:tag`
     required: true
+  GITHUB_TOKEN:
+    description: The GitHub token to use for uploading the scan results
+    required: true
 
 runs:
   using: "composite"
@@ -20,6 +23,7 @@ runs:
         image-ref: ${{ inputs.image }}
         format: sarif
         output: trivy-results.sarif
+        github-pat: ${{ inputs.GITHUB_TOKEN }}
 
     - name: Upload scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3

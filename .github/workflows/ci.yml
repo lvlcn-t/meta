@@ -54,16 +54,10 @@ jobs:
         with:
           context: .
           platforms: ${{ inputs.platforms}}
-          push: true
+          push: false
           tags: |
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
             ${{ steps.meta.outputs.tags }}
-
-      - name: Scan Image
-        uses: lvlcn-t/meta/.github/actions/scan-image@main
-        with:
-          image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sign Image
         uses: lvlcn-t/meta/.github/actions/sign-image@main
@@ -71,3 +65,13 @@ jobs:
           image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
           digest: ${{ steps.build-push.outputs.digest }}
           cosign_key: ${{ secrets.COSIGN_KEY }}
+
+      - name: Push image to registry
+        run: |
+          docker push ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
+
+      - name: Scan Image
+        uses: lvlcn-t/meta/.github/actions/scan-image@main
+        with:
+          image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

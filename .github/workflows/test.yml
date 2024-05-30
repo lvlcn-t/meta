@@ -61,7 +61,7 @@ jobs:
         uses: lvlcn-t/meta/.github/actions/sast-go@main
 
       - name: Lint Go
-        if: hashFiles('**/*.go') != ''
+        if: hashFiles('**/*.go') != '' && !contains(inputs.golangci_config, 'skip')
         uses: lvlcn-t/meta/.github/actions/lint-go@main
         with:
           go_version_file: ${{ inputs.go_version_file }}

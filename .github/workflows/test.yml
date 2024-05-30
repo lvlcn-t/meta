@@ -64,6 +64,7 @@ jobs:
         if: hashFiles('**/*.go') != ''
         uses: lvlcn-t/meta/.github/actions/lint-go@main
         with:
+          go_version_file: ${{ inputs.go_version_file }}
           golangci_config: ${{ inputs.golangci_config }}
 
       - name: Test Go

@@ -35,6 +35,11 @@ on:
         description: Additional parameters to pass to the test command
         type: string
         required: false
+      package:
+        description: The package to test
+        type: string
+        required: false
+        default: ./...
     secrets:
       PRIVATE_GO_SERVER_TOKEN:
         description: Token for the private Go server
@@ -74,6 +79,7 @@ jobs:
           go_version_file: ${{ inputs.go_version_file }}
           before_tests: ${{ inputs.before_tests }}
           additional_args: ${{ inputs.additional_args }}
+          package: ${{ inputs.package }}
           private_go_server: ${{ inputs.private_go_server }}
           private_go_server_token: ${{ secrets.PRIVATE_GO_SERVER_TOKEN }}
 

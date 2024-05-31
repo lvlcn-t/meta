@@ -22,6 +22,10 @@ inputs:
   additional_args:
     description: Additional parameters to pass to the test
     required: false
+  package:
+    description: The package to test
+    required: false
+    default: ./...
 
 runs:
   using: "composite"
@@ -49,7 +53,7 @@ runs:
         go install gotest.tools/gotestsum@latest
         go install github.com/mfridman/tparse@latest
         gotestsum --junitfile report.xml --jsonfile report.json --format standard-verbose \
-        -- -race -count=1 -covermode=atomic -coverprofile=cover.out.tmp -coverpkg=./... ${{ inputs.additional_args }} ./...
+        -- -race -count=1 -covermode=atomic -coverprofile=cover.out.tmp -coverpkg=${{ inputs.package }} ${{ inputs.additional_args }} ${{ inputs.package }}
         tparse -notests -follow -all || true
         tparse -format markdown -file report.json -all -slow 20 > $GITHUB_STEP_SUMMARY
         cat cover.out.tmp | grep -vE '(_test.go|_moq.go|_templ.go)' | grep -vE 'test/|tests/|mocks/' > cover.out

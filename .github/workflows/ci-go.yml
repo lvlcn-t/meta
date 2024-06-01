@@ -56,13 +56,6 @@ jobs:
         id: image_sha
         run: echo "image_sha=$(docker inspect ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }} --format={{.Id}})" >> $GITHUB_OUTPUT
 
-      - name: Sign image
-        uses: lvlcn-t/meta/.github/actions/sign-image@main
-        with:
-          image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
-          digest: ${{ steps.image_sha.outputs.image_sha }}
-          cosign_key: ${{ secrets.COSIGN_KEY }}
-
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:

@@ -61,10 +61,6 @@ jobs:
     if: inputs.go_version_file != ''
     steps:
       - uses: actions/checkout@v4
-      - name: Scan Go
-        if: hashFiles('**/*.go') != ''
-        uses: lvlcn-t/meta/.github/actions/sast-go@main
-
       - name: Lint Go
         if: hashFiles('**/*.go') != '' && !contains(inputs.golangci_config, 'skip')
         uses: lvlcn-t/meta/.github/actions/lint-go@main
@@ -82,6 +78,10 @@ jobs:
           package: ${{ inputs.package }}
           private_go_server: ${{ inputs.private_go_server }}
           private_go_server_token: ${{ secrets.PRIVATE_GO_SERVER_TOKEN }}
+
+      - name: Scan Go
+        if: hashFiles('**/*.go') != ''
+        uses: lvlcn-t/meta/.github/actions/sast-go@main
 
   python:
     runs-on: ubuntu-latest

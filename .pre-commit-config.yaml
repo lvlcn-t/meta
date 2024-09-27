@@ -11,7 +11,7 @@ repos:
   # If this is used for business, a free license is required.
   # It can be obtained from https://gitleaks.io/products.html
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.18.2
+    rev: v8.19.3
     hooks:
       - id: gitleaks
         stages: [pre-commit]

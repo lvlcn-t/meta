@@ -42,7 +42,7 @@ runs:
         passphrase: ${{ inputs.GPG_PASSPHRASE }}
 
     - name: Run goreleaser
-      uses: goreleaser/goreleaser-action@v5
+      uses: goreleaser/goreleaser-action@v6
       with:
         version: latest
         args: ${{ inputs.releaser_args }}

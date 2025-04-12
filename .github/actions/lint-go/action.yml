@@ -22,6 +22,6 @@ runs:
         go-version-file: ${{ inputs.go_version_file }}
 
     - name: golangci-lint
-      uses: golangci/golangci-lint-action@v4
+      uses: golangci/golangci-lint-action@v7
       with:
         args: --config ${{ inputs.golangci_config }}

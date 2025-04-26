@@ -32,7 +32,7 @@ jobs:
 
       - name: Install go toolchain for pre-commit
         run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.3
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.1.5
           go install mvdan.cc/gofumpt@latest
 
       - uses: pre-commit/action@v3.0.1

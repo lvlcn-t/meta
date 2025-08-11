@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.go_version_file != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Lint Go
         if: hashFiles('**/*.go') != '' && !contains(inputs.golangci_config, 'skip')
         uses: lvlcn-t/meta/.github/actions/lint-go@main
@@ -88,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     if: inputs.python_version != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       # TODO: Uncomment when the actions are ready
       # - name: Lint Python
       #   if: hashFiles('**/*.py') != ''

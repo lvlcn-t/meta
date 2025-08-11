@@ -38,7 +38,7 @@ jobs:
     name: Build, scan & push image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build Go
         uses: lvlcn-t/meta/.github/actions/build-go@main
         with:

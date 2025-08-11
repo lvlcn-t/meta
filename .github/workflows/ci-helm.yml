@@ -16,7 +16,7 @@ jobs:
     name: Build, lint & push helm chart
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       # We're fetching the tags explicitly because the checkout action's `fetch-tags` option
       # doesn't work -> https://github.com/actions/checkout/issues/1467
       - name: Fetch tags

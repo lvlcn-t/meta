@@ -20,12 +20,12 @@ jobs:
         with:
           python-version: "3.12"
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         if: ${{ inputs.go_version_file }} == ''
         with:
           go-version: ${{ inputs.go_version }}
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         if: ${{ inputs.go_version_file }} != ''
         with:
           go-version-file: ${{ inputs.go_version_file }}

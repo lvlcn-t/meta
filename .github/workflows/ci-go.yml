@@ -62,12 +62,40 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
-      - name: Get tag ref
-        id: version
-        run: echo "value=commit-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: Resolve image ref
+        id: image_ref
+        run: |
+          set -euo pipefail
+
+          base="ghcr.io/${{ github.repository }}:commit-$(git rev-parse --short HEAD)"
+
+          if docker image inspect "$base" >/dev/null 2>&1; then
+            image="$base"
+          elif docker image inspect "${base}-amd64" >/dev/null 2>&1; then
+            image="${base}-amd64"
+          elif docker manifest inspect "$base" >/dev/null 2>&1; then
+            image="$base"
+          elif docker manifest inspect "${base}-amd64" >/dev/null 2>&1; then
+            image="${base}-amd64"
+          else
+            echo "Unable to resolve image reference for CI scan" >&2
+            echo "Checked: $base and ${base}-amd64" >&2
+            exit 1
+          fi
+
+          echo "value=$image" >> "$GITHUB_OUTPUT"
+          echo "Using image: $image"
+
+      - name: Push image to registry
+        run: |
+          if docker image inspect "${{ steps.image_ref.outputs.value }}" >/dev/null 2>&1; then
+            docker push "${{ steps.image_ref.outputs.value }}"
+          else
+            echo "Image is not loaded in local Docker daemon, skipping push"
+          fi
 
       - name: Scan Image
         uses: lvlcn-t/meta/.github/actions/scan-image@main
         with:
-          image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
+          image: ${{ steps.image_ref.outputs.value }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

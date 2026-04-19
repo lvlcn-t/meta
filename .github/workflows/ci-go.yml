@@ -39,22 +39,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Build Go
-        uses: lvlcn-t/meta/.github/actions/build-go@main
-        with:
-          go_version_file: ${{ inputs.go_version_file }}
-          releaser_args: release --snapshot --clean --config ${{ inputs.go_releaser_config }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-
-      - name: Get tag ref
-        id: version
-        run: echo "value=commit-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Get Image SHA
-        id: image_sha
-        run: echo "image_sha=$(docker inspect ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }} --format={{.Id}})" >> $GITHUB_OUTPUT
 
       - name: Login to GHCR
         uses: docker/login-action@v4
@@ -63,9 +47,24 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push image to registry
-        run: |
-          docker push ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build Go
+        uses: lvlcn-t/meta/.github/actions/build-go@main
+        with:
+          go_version_file: ${{ inputs.go_version_file }}
+          releaser_args: release --snapshot --clean --skip=announce,validate --config ${{ inputs.go_releaser_config }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Get tag ref
+        id: version
+        run: echo "value=commit-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Scan Image
         uses: lvlcn-t/meta/.github/actions/scan-image@main

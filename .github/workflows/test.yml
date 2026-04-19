@@ -16,6 +16,10 @@ on:
         description: URL of the private Go server
         type: string
         required: false
+      env:
+        description: Additional environment variables as KEY=VALUE pairs separated by newlines
+        type: string
+        required: false
 
       python_version:
         description: Python version to use
@@ -67,6 +71,7 @@ jobs:
         with:
           go_version_file: ${{ inputs.go_version_file }}
           golangci_config: ${{ inputs.golangci_config }}
+          env: ${{ inputs.env }}
 
       - name: Test Go
         if: hashFiles('**/*.go') != ''
@@ -78,6 +83,7 @@ jobs:
           package: ${{ inputs.package }}
           private_go_server: ${{ inputs.private_go_server }}
           private_go_server_token: ${{ secrets.PRIVATE_GO_SERVER_TOKEN }}
+          env: ${{ inputs.env }}
 
       # TODO: Uncomment when the action is usable with go1.23
       # - name: Scan Go

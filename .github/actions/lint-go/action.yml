@@ -11,6 +11,9 @@ inputs:
     description: Path to the golangci config file
     required: false
     default: .golangci.yml
+  env:
+    description: Additional environment variables as KEY=VALUE pairs separated by newlines
+    required: false
 
 runs:
   using: "composite"
@@ -20,6 +23,15 @@ runs:
       uses: actions/setup-go@v5
       with:
         go-version-file: ${{ inputs.go_version_file }}
+
+    - name: Export additional environment variables
+      if: inputs.env != ''
+      shell: bash
+      run: |
+        while IFS= read -r line; do
+          [[ -z "$line" ]] && continue
+          echo "$line" >> "$GITHUB_ENV"
+        done <<< "${{ inputs.env }}"
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v7

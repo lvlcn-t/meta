@@ -47,9 +47,16 @@ jobs:
         id: version
         run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
 
+      - name: Get image digest
+        id: digest
+        run: |
+          DIGEST=$(skopeo inspect --format '{{.Digest}}' \
+            docker://ghcr.io/${{ github.repository }}:${{ steps.version.outputs.tag }})
+          echo "value=${DIGEST}" >> $GITHUB_OUTPUT
+
       - name: Sign release image
         uses: lvlcn-t/meta/.github/actions/sign-image@main
         with:
           image: ghcr.io/${{ github.repository }}:${{ steps.version.outputs.tag }}
-          digest: ${{ github.sha }}
+          digest: ${{ steps.digest.outputs.value }}
           cosign_key: ${{ secrets.COSIGN_KEY }}

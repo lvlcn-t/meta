@@ -10,7 +10,12 @@ inputs:
       Example: `ghcr.io/org/repo/image:tag`
     required: true
   digest:
-    description: The digest of the image to sign.
+    description: |
+      The OCI digest of the image to sign.
+
+      Must be in the form `sha256:<64-hex-chars>` as returned by the
+      registry after push (e.g. from `skopeo inspect --format '{{.Digest}}'`).
+      Do NOT pass a git commit SHA here.
     required: true
   cosign_key:
     description: The cosign key to use for signing.

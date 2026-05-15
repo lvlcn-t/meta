@@ -14,6 +14,9 @@ inputs:
   GITHUB_TOKEN:
     description: The GitHub token to use for the release
     required: true
+  TAP_GITHUB_TOKEN:
+    description: The GitHub token to use for the Homebrew Tap release repo
+    required: false
   GPG_PRIVATE_KEY:
     description: The GPG private key to use for signing the release
     required: false
@@ -48,4 +51,5 @@ runs:
         args: ${{ inputs.releaser_args }}
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        TAP_GITHUB_TOKEN: ${{ inputs.TAP_GITHUB_TOKEN }}
         GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}

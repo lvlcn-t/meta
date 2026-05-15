@@ -9,6 +9,9 @@ on:
         required: false
         default: go.mod
     secrets:
+      TAP_GITHUB_TOKEN:
+        description: The GitHub token to use for the Homebrew Tap release repo
+        required: false
       GPG_PRIVATE_KEY:
         description: GPG private key to sign the release
         required: false
@@ -47,6 +50,7 @@ jobs:
           go_version_file: ${{ inputs.go_version_file }}
           releaser_args: release --clean
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 

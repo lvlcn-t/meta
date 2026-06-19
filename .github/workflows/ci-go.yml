@@ -38,7 +38,7 @@ jobs:
     name: Build, scan & push image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Login to GHCR
         uses: docker/login-action@v4

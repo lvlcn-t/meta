@@ -12,6 +12,9 @@ on:
       TAP_GITHUB_TOKEN:
         description: The GitHub token to use for the Homebrew Tap release repo
         required: false
+      NUR_GITHUB_TOKEN:
+        description: The GitHub token to use for the Nix User Repository
+        required: false
       GPG_PRIVATE_KEY:
         description: GPG private key to sign the release
         required: false
@@ -30,6 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+
+      - name: Set up Nix
+        uses: DeterminateSystems/nix-installer-action@v22
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -51,6 +57,7 @@ jobs:
           releaser_args: release --clean
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
+          NUR_GITHUB_TOKEN: ${{ secrets.NUR_GITHUB_TOKEN }}
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
